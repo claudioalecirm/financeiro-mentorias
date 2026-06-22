@@ -14,51 +14,44 @@ const addMonths = (dateStr, n) => {
   return d.toISOString().split("T")[0];
 };
 
-// ── CORES ──────────────────────────────────────────────────────────────────────
 const C = {
-  bg: "#0d0d0d",
-  card: "#1a1a1a",
-  border: "#2a2a2a",
-  gold: "#c8a96e",
-  goldLight: "#f0dfb4",
-  goldDark: "#8a6f3e",
-  text: "#f5f5f5",
-  muted: "#888",
-  danger: "#e05555",
-  success: "#4caf70",
-  warning: "#e0a030",
+  bg: "#0d0d0d", card: "#1a1a1a", border: "#2a2a2a",
+  gold: "#c8a96e", goldLight: "#f0dfb4", goldDark: "#8a6f3e",
+  text: "#f5f5f5", muted: "#888",
+  danger: "#e05555", success: "#4caf70", warning: "#e0a030", purple: "#9b6fd4",
 };
 
 const s = {
-  app: { minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "system-ui, -apple-system, sans-serif", paddingBottom: 80 },
+  app: { minHeight: "100vh", background: C.bg, color: C.text, fontFamily: "system-ui,-apple-system,sans-serif", paddingBottom: 80 },
   header: { background: C.card, borderBottom: `1px solid ${C.border}`, padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 10 },
   headerTitle: { color: C.gold, fontWeight: 700, fontSize: 16, letterSpacing: 1 },
   nav: { position: "fixed", bottom: 0, left: 0, right: 0, background: C.card, borderTop: `1px solid ${C.border}`, display: "flex", zIndex: 10 },
-  navBtn: (active) => ({ flex: 1, padding: "12px 4px 10px", background: "none", border: "none", color: active ? C.gold : C.muted, fontSize: 10, fontWeight: active ? 700 : 400, cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, transition: "color .2s" }),
+  navBtn: (a) => ({ flex: 1, padding: "12px 4px 10px", background: "none", border: "none", color: a ? C.gold : C.muted, fontSize: 10, fontWeight: a ? 700 : 400, cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }),
   page: { padding: "20px 16px" },
-  card: { background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: "16px", marginBottom: 12 },
-  goldCard: { background: `linear-gradient(135deg, ${C.goldDark}22, ${C.gold}11)`, border: `1px solid ${C.gold}44`, borderRadius: 12, padding: 16, marginBottom: 12 },
+  card: { background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: 16, marginBottom: 12 },
+  goldCard: { background: `linear-gradient(135deg,${C.goldDark}22,${C.gold}11)`, border: `1px solid ${C.gold}44`, borderRadius: 12, padding: 16, marginBottom: 12 },
   label: { fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: 1, marginBottom: 4 },
   value: { fontSize: 22, fontWeight: 700, color: C.gold },
   btn: { background: C.gold, color: "#0d0d0d", border: "none", borderRadius: 8, padding: "12px 20px", fontWeight: 700, fontSize: 14, cursor: "pointer", width: "100%" },
   btnOutline: { background: "none", color: C.gold, border: `1px solid ${C.gold}`, borderRadius: 8, padding: "10px 16px", fontWeight: 600, fontSize: 13, cursor: "pointer" },
-  btnDanger: { background: "none", color: C.danger, border: `1px solid ${C.danger}44`, borderRadius: 8, padding: "8px 14px", fontSize: 12, cursor: "pointer" },
-  btnSmall: { background: C.gold, color: "#0d0d0d", border: "none", borderRadius: 6, padding: "6px 12px", fontWeight: 700, fontSize: 12, cursor: "pointer" },
-  btnSmallOutline: { background: "none", color: C.muted, border: `1px solid ${C.border}`, borderRadius: 6, padding: "6px 12px", fontSize: 12, cursor: "pointer" },
   input: { width: "100%", background: "#111", border: `1px solid ${C.border}`, borderRadius: 8, padding: "12px 14px", color: C.text, fontSize: 14, outline: "none", boxSizing: "border-box" },
-  select: { width: "100%", background: "#111", border: `1px solid ${C.border}`, borderRadius: 8, padding: "12px 14px", color: C.text, fontSize: 14, outline: "none", boxSizing: "border-box", appearance: "none" },
+  textarea: { width: "100%", background: "#111", border: `1px solid ${C.border}`, borderRadius: 8, padding: "12px 14px", color: C.text, fontSize: 13, outline: "none", boxSizing: "border-box", resize: "vertical", minHeight: 90, lineHeight: 1.5 },
+  select: { width: "100%", background: "#111", border: `1px solid ${C.border}`, borderRadius: 8, padding: "12px 14px", color: C.text, fontSize: 14, outline: "none", boxSizing: "border-box" },
   fieldGroup: { marginBottom: 16 },
   fieldLabel: { fontSize: 12, color: C.muted, marginBottom: 6, display: "block" },
   row: { display: "flex", gap: 10 },
-  tag: (color) => ({ display: "inline-block", fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 20, background: color + "22", color, letterSpacing: 0.5 }),
+  tag: (c) => ({ display: "inline-block", fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 20, background: c + "22", color: c, letterSpacing: 0.5 }),
   divider: { height: 1, background: C.border, margin: "16px 0" },
   section: { fontSize: 11, color: C.muted, textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 12, marginTop: 4 },
   modal: { position: "fixed", inset: 0, background: "#000c", zIndex: 100, display: "flex", alignItems: "flex-end" },
-  modalContent: { background: C.card, borderRadius: "20px 20px 0 0", padding: 20, width: "100%", maxHeight: "90vh", overflowY: "auto", border: `1px solid ${C.border}` },
+  modalContent: { background: C.card, borderRadius: "20px 20px 0 0", padding: 20, width: "100%", maxHeight: "92vh", overflowY: "auto", border: `1px solid ${C.border}` },
   modalTitle: { fontSize: 16, fontWeight: 700, color: C.gold, marginBottom: 20 },
   statGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 },
-  statCard: (accent) => ({ background: C.card, border: `1px solid ${accent || C.border}`, borderRadius: 10, padding: "14px 12px" }),
-  toast: (type) => ({ position: "fixed", top: 20, left: "50%", transform: "translateX(-50%)", background: type === "error" ? C.danger : C.success, color: "#fff", padding: "10px 20px", borderRadius: 8, fontSize: 13, fontWeight: 600, zIndex: 999, whiteSpace: "nowrap" }),
+  statCard: (a) => ({ background: C.card, border: `1px solid ${a || C.border}`, borderRadius: 10, padding: "14px 12px" }),
+  toast: (t) => ({ position: "fixed", top: 20, left: "50%", transform: "translateX(-50%)", background: t === "error" ? C.danger : C.success, color: "#fff", padding: "10px 20px", borderRadius: 8, fontSize: 13, fontWeight: 600, zIndex: 999, whiteSpace: "nowrap" }),
+  toggle: (on) => ({ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }),
+  toggleTrack: (on) => ({ background: on ? C.gold : C.border, border: "none", borderRadius: 20, width: 44, height: 24, cursor: "pointer", position: "relative", transition: "background .2s" }),
+  toggleThumb: (on) => ({ position: "absolute", top: 3, left: on ? 22 : 3, width: 18, height: 18, borderRadius: 9, background: on ? "#000" : C.muted, transition: "left .2s" }),
 };
 
 // ── TOAST ──────────────────────────────────────────────────────────────────────
@@ -67,8 +60,85 @@ function Toast({ msg, type, onDone }) {
   return <div style={s.toast(type)}>{msg}</div>;
 }
 
-// ── PAINEL PRINCIPAL (Dashboard) ───────────────────────────────────────────────
-function Dashboard({ onNav }) {
+// ── TELA DE LOGIN ──────────────────────────────────────────────────────────────
+function Login({ onLogin }) {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState("");
+  const [showSenha, setShowSenha] = useState(false);
+
+  const entrar = async () => {
+    if (!email || !senha) { setErro("Preencha e-mail e senha."); return; }
+    setLoading(true); setErro("");
+    const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
+    if (error) { setErro("E-mail ou senha incorretos."); setLoading(false); return; }
+    onLogin();
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: C.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
+      <div style={{ width: "100%", maxWidth: 380 }}>
+        {/* Logo / Header */}
+        <div style={{ textAlign: "center", marginBottom: 40 }}>
+          <div style={{ fontSize: 36, marginBottom: 12 }}>⚔</div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: C.gold, letterSpacing: 2, marginBottom: 4 }}>HOMEM ESPIRITUAL</div>
+          <div style={{ fontSize: 12, color: C.muted, letterSpacing: 1 }}>CONTROLE FINANCEIRO</div>
+        </div>
+
+        {/* Card de login */}
+        <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 16, padding: 24 }}>
+          <div style={{ fontSize: 13, color: C.muted, marginBottom: 20, textAlign: "center" }}>Acesso restrito</div>
+
+          <div style={s.fieldGroup}>
+            <label style={s.fieldLabel}>E-mail</label>
+            <input
+              style={s.input}
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && entrar()}
+              placeholder="seu@email.com"
+              autoComplete="email"
+            />
+          </div>
+
+          <div style={s.fieldGroup}>
+            <label style={s.fieldLabel}>Senha</label>
+            <div style={{ position: "relative" }}>
+              <input
+                style={{ ...s.input, paddingRight: 44 }}
+                type={showSenha ? "text" : "password"}
+                value={senha}
+                onChange={e => setSenha(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && entrar()}
+                placeholder="••••••••"
+                autoComplete="current-password"
+              />
+              <button
+                onClick={() => setShowSenha(!showSenha)}
+                style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: C.muted, cursor: "pointer", fontSize: 16 }}
+              >{showSenha ? "🙈" : "👁"}</button>
+            </div>
+          </div>
+
+          {erro && <div style={{ background: C.danger + "22", border: `1px solid ${C.danger}44`, borderRadius: 8, padding: "10px 14px", fontSize: 13, color: C.danger, marginBottom: 16 }}>{erro}</div>}
+
+          <button style={s.btn} onClick={entrar} disabled={loading}>
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
+        </div>
+
+        <div style={{ textAlign: "center", marginTop: 24, fontSize: 11, color: C.muted }}>
+          pra cima e pra frente, sempre.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── DASHBOARD ──────────────────────────────────────────────────────────────────
+function Dashboard() {
   const [data, setData] = useState(null);
   const [parcelas, setParcelas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -78,11 +148,9 @@ function Dashboard({ onNav }) {
     setLoading(true);
     const [{ data: dash }, { data: parc }] = await Promise.all([
       supabase.from("vw_dashboard").select("*").single(),
-      supabase.from("parcelas").select("*, mentorados(nome, tipos_mentoria(nome))").eq("pago", false).order("vencimento").limit(10),
+      supabase.from("parcelas").select("*, mentorados(nome, parceria, tipos_mentoria(nome))").eq("pago", false).order("vencimento").limit(10),
     ]);
-    setData(dash);
-    setParcelas(parc || []);
-    setLoading(false);
+    setData(dash); setParcelas(parc || []); setLoading(false);
   }, []);
 
   useEffect(() => { load(); }, [load]);
@@ -94,7 +162,7 @@ function Dashboard({ onNav }) {
 
   return (
     <div style={s.page}>
-      <div style={{ ...s.goldCard, marginBottom: 16 }}>
+      <div style={s.goldCard}>
         <div style={{ fontSize: 11, color: C.gold, letterSpacing: 1, marginBottom: 4 }}>⚔ HOMEM ESPIRITUAL — FINANCEIRO</div>
         <div style={{ fontSize: 13, color: C.muted }}>Visão geral das mentorias</div>
       </div>
@@ -102,50 +170,51 @@ function Dashboard({ onNav }) {
       <div style={s.statGrid}>
         <div style={s.statCard(C.gold + "44")}>
           <div style={s.label}>Total contratado</div>
-          <div style={{ ...s.value, fontSize: 18 }}>{fmt(data?.total_contratado)}</div>
+          <div style={{ ...s.value, fontSize: 17 }}>{fmt(data?.total_contratado)}</div>
         </div>
         <div style={s.statCard(C.success + "44")}>
           <div style={s.label}>Total recebido</div>
-          <div style={{ ...s.value, fontSize: 18, color: C.success }}>{fmt(data?.total_recebido)}</div>
+          <div style={{ ...s.value, fontSize: 17, color: C.success }}>{fmt(data?.total_recebido)}</div>
         </div>
         <div style={s.statCard(C.warning + "44")}>
           <div style={s.label}>A receber</div>
-          <div style={{ ...s.value, fontSize: 18, color: C.warning }}>{fmt(data?.total_a_receber)}</div>
+          <div style={{ ...s.value, fontSize: 17, color: C.warning }}>{fmt(data?.total_a_receber)}</div>
         </div>
-        <div style={s.statCard(C.border)}>
-          <div style={s.label}>Mentorados ativos</div>
+        <div style={s.statCard()}>
+          <div style={s.label}>Ativos</div>
           <div style={{ ...s.value, fontSize: 28 }}>{data?.mentorados_ativos}</div>
         </div>
       </div>
 
       <div style={{ ...s.card, border: `1px solid ${C.gold}44` }}>
-        <div style={s.label}>📅 {mes}</div>
+        <div style={{ ...s.label, marginBottom: 10 }}>📅 {mes}</div>
         <div style={s.row}>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 11, color: C.muted }}>A receber no mês</div>
-            <div style={{ fontSize: 20, fontWeight: 700, color: C.warning }}>{fmt(data?.a_receber_mes_atual)}</div>
+            <div style={{ fontSize: 11, color: C.muted }}>A receber</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: C.warning }}>{fmt(data?.a_receber_mes_atual)}</div>
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 11, color: C.muted }}>Recebido no mês</div>
-            <div style={{ fontSize: 20, fontWeight: 700, color: C.success }}>{fmt(data?.recebido_mes_atual)}</div>
+            <div style={{ fontSize: 11, color: C.muted }}>Recebido</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: C.success }}>{fmt(data?.recebido_mes_atual)}</div>
           </div>
         </div>
       </div>
 
       {vencidas.length > 0 && (
         <>
-          <div style={s.section}>⚠️ Parcelas vencidas ({vencidas.length})</div>
+          <div style={s.section}>⚠️ Vencidas ({vencidas.length})</div>
           {vencidas.map(p => (
             <div key={p.id} style={{ ...s.card, borderColor: C.danger + "66" }}>
               <div style={s.row}>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, fontSize: 13 }}>{p.mentorados?.nome}</div>
+                  <div style={{ fontWeight: 600, fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}>
+                    {p.mentorados?.nome}
+                    {p.mentorados?.parceria && <span style={s.tag(C.purple)}>parceria</span>}
+                  </div>
                   <div style={{ fontSize: 11, color: C.muted }}>{p.mentorados?.tipos_mentoria?.nome} • Parcela {p.numero}</div>
                   <div style={{ fontSize: 11, color: C.danger }}>Venceu {fmtDate(p.vencimento)}</div>
                 </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontWeight: 700, color: C.gold }}>{fmt(p.valor)}</div>
-                </div>
+                <div style={{ fontWeight: 700, color: C.gold }}>{fmt(p.valor)}</div>
               </div>
             </div>
           ))}
@@ -159,13 +228,14 @@ function Dashboard({ onNav }) {
             <div key={p.id} style={s.card}>
               <div style={s.row}>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, fontSize: 13 }}>{p.mentorados?.nome}</div>
+                  <div style={{ fontWeight: 600, fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}>
+                    {p.mentorados?.nome}
+                    {p.mentorados?.parceria && <span style={s.tag(C.purple)}>parceria</span>}
+                  </div>
                   <div style={{ fontSize: 11, color: C.muted }}>{p.mentorados?.tipos_mentoria?.nome} • Parcela {p.numero}</div>
                   <div style={{ fontSize: 11, color: C.muted }}>{fmtDate(p.vencimento)}</div>
                 </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontWeight: 700, color: C.gold }}>{fmt(p.valor)}</div>
-                </div>
+                <div style={{ fontWeight: 700, color: C.gold }}>{fmt(p.valor)}</div>
               </div>
             </div>
           ))}
@@ -182,11 +252,29 @@ function Dashboard({ onNav }) {
   );
 }
 
-// ── FORMULÁRIO NOVO MENTORADO ──────────────────────────────────────────────────
+// ── TOGGLE HELPER ──────────────────────────────────────────────────────────────
+function Toggle({ label, value, onChange }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+      <label style={{ fontSize: 13, color: C.text }}>{label}</label>
+      <button onClick={() => onChange(!value)} style={s.toggleTrack(value)}>
+        <div style={s.toggleThumb(value)} />
+      </button>
+    </div>
+  );
+}
+
+// ── NOVO MENTORADO ─────────────────────────────────────────────────────────────
 function NovoMentorado({ onClose, onSaved, toast }) {
   const [tipos, setTipos] = useState([]);
-  const [form, setForm] = useState({ nome: "", telefone: "", email: "", tipo_mentoria_id: "", valor_total: "", parcelado: false, num_parcelas: 1, valor_entrada: "", data_inicio: today(), dia_cobranca: 10, status: "ativo", observacoes: "" });
-  const [tipoSel, setTipoSel] = useState(null);
+  const [form, setForm] = useState({
+    nome: "", telefone: "", email: "",
+    tipo_mentoria_id: "", valor_total: "",
+    parcelado: false, num_parcelas: 1, valor_entrada: "",
+    data_inicio: today(), dia_cobranca: 10,
+    status: "ativo", observacoes: "",
+    parceria: false, parceria_descricao: "", parceria_desconto: "",
+  });
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState([]);
 
@@ -199,47 +287,60 @@ function NovoMentorado({ onClose, onSaved, toast }) {
   useEffect(() => {
     if (form.tipo_mentoria_id) {
       const t = tipos.find(t => t.id === form.tipo_mentoria_id);
-      if (t) { setTipoSel(t); set("valor_total", t.valor); }
+      if (t) set("valor_total", t.valor);
     }
   }, [form.tipo_mentoria_id, tipos]);
 
-  // Calcula preview de parcelas
+  // Calcula valor efetivo após desconto de parceria
+  const valorTotal = parseFloat(form.valor_total) || 0;
+  const desconto = parseFloat(form.parceria && form.parceria_desconto ? form.parceria_desconto : 0);
+  const valorEfetivo = Math.max(0, valorTotal - desconto);
+  const entrada = parseFloat(form.valor_entrada) || 0;
+  const restante = valorEfetivo - entrada;
+  const nParc = parseInt(form.num_parcelas) || 1;
+  const valorParc = form.parcelado && nParc > 0 ? restante / nParc : restante;
+
+  // Preview parcelas
   useEffect(() => {
-    const total = parseFloat(form.valor_total) || 0;
-    const entrada = parseFloat(form.valor_entrada) || 0;
-    const nParc = parseInt(form.num_parcelas) || 1;
-    if (!total || !form.data_inicio) { setPreview([]); return; }
-
-    const parcelas = [];
+    if (!valorEfetivo || !form.data_inicio) { setPreview([]); return; }
+    const list = [];
     if (form.parcelado && entrada > 0) {
-      parcelas.push({ numero: 0, tipo: "entrada", valor: entrada, vencimento: form.data_inicio });
+      list.push({ numero: 0, tipo: "entrada", valor: entrada, vencimento: form.data_inicio });
     }
-    const restante = form.parcelado ? total - entrada : total;
-    const valorParc = restante / (form.parcelado ? nParc : 1);
-
+    const r = form.parcelado ? restante : valorEfetivo;
+    const vp = r / (form.parcelado ? nParc : 1);
     for (let i = 0; i < (form.parcelado ? nParc : 1); i++) {
-      parcelas.push({ numero: i + 1, tipo: "parcela", valor: valorParc, vencimento: addMonths(form.data_inicio, i + (form.parcelado && entrada > 0 ? 1 : 0)) });
+      list.push({ numero: i + 1, tipo: "parcela", valor: vp, vencimento: addMonths(form.data_inicio, i + (form.parcelado && entrada > 0 ? 1 : 0)) });
     }
-    setPreview(parcelas);
-  }, [form.valor_total, form.valor_entrada, form.num_parcelas, form.parcelado, form.data_inicio]);
+    setPreview(list);
+  }, [valorEfetivo, entrada, nParc, form.parcelado, form.data_inicio]);
 
   const salvar = async () => {
-    if (!form.nome || !form.tipo_mentoria_id || !form.valor_total) { toast("Preencha nome, tipo e valor", "error"); return; }
+    if (!form.nome || !form.tipo_mentoria_id || !valorTotal) { toast("Preencha nome, tipo e valor", "error"); return; }
+    if (form.parceria && !form.parceria_descricao.trim()) { toast("Descreva os termos da parceria", "error"); return; }
     setLoading(true);
-    const { data: men, error } = await supabase.from("mentorados").insert({ nome: form.nome, telefone: form.telefone, email: form.email, tipo_mentoria_id: form.tipo_mentoria_id, valor_total: parseFloat(form.valor_total), parcelado: form.parcelado, num_parcelas: form.parcelado ? parseInt(form.num_parcelas) : 1, valor_entrada: parseFloat(form.valor_entrada) || 0, data_inicio: form.data_inicio, dia_cobranca: parseInt(form.dia_cobranca), status: form.status, observacoes: form.observacoes }).select().single();
-    if (error) { toast("Erro ao salvar: " + error.message, "error"); setLoading(false); return; }
+    const { data: men, error } = await supabase.from("mentorados").insert({
+      nome: form.nome, telefone: form.telefone, email: form.email,
+      tipo_mentoria_id: form.tipo_mentoria_id,
+      valor_total: valorEfetivo,
+      parcelado: form.parcelado,
+      num_parcelas: form.parcelado ? nParc : 1,
+      valor_entrada: entrada,
+      data_inicio: form.data_inicio,
+      dia_cobranca: parseInt(form.dia_cobranca),
+      status: form.status, observacoes: form.observacoes,
+      parceria: form.parceria,
+      parceria_descricao: form.parceria ? form.parceria_descricao : null,
+      parceria_desconto: form.parceria ? desconto : 0,
+    }).select().single();
 
-    // Insere parcelas
-    const parcInsert = preview.map(p => ({ mentorado_id: men.id, numero: p.numero, tipo: p.tipo, valor: p.valor, vencimento: p.vencimento, pago: false }));
-    await supabase.from("parcelas").insert(parcInsert);
-
-    toast("Mentorado salvo com sucesso!", "success");
-    setLoading(false);
-    onSaved();
+    if (error) { toast("Erro: " + error.message, "error"); setLoading(false); return; }
+    await supabase.from("parcelas").insert(
+      preview.map(p => ({ mentorado_id: men.id, numero: p.numero, tipo: p.tipo, valor: p.valor, vencimento: p.vencimento, pago: false }))
+    );
+    toast("Mentorado salvo!", "success");
+    setLoading(false); onSaved();
   };
-
-  const restante = (parseFloat(form.valor_total) || 0) - (parseFloat(form.valor_entrada) || 0);
-  const valorParc = form.parcelado && form.num_parcelas > 0 ? restante / form.num_parcelas : restante;
 
   return (
     <div style={s.modal} onClick={e => e.target === e.currentTarget && onClose()}>
@@ -250,13 +351,10 @@ function NovoMentorado({ onClose, onSaved, toast }) {
           <label style={s.fieldLabel}>Nome completo *</label>
           <input style={s.input} value={form.nome} onChange={e => set("nome", e.target.value)} placeholder="Nome do mentorado" />
         </div>
-        <div style={s.row}>
-          <div style={{ ...s.fieldGroup, flex: 1 }}>
-            <label style={s.fieldLabel}>Telefone / WhatsApp</label>
-            <input style={s.input} value={form.telefone} onChange={e => set("telefone", e.target.value)} placeholder="(44) 9 9999-9999" />
-          </div>
+        <div style={s.fieldGroup}>
+          <label style={s.fieldLabel}>Telefone / WhatsApp</label>
+          <input style={s.input} value={form.telefone} onChange={e => set("telefone", e.target.value)} placeholder="(44) 9 9999-9999" />
         </div>
-
         <div style={s.fieldGroup}>
           <label style={s.fieldLabel}>Tipo de mentoria *</label>
           <select style={s.select} value={form.tipo_mentoria_id} onChange={e => set("tipo_mentoria_id", e.target.value)}>
@@ -264,7 +362,6 @@ function NovoMentorado({ onClose, onSaved, toast }) {
             {tipos.map(t => <option key={t.id} value={t.id}>{t.nome} — {fmt(t.valor)}</option>)}
           </select>
         </div>
-
         <div style={s.row}>
           <div style={{ ...s.fieldGroup, flex: 1 }}>
             <label style={s.fieldLabel}>Valor total (R$) *</label>
@@ -278,13 +375,49 @@ function NovoMentorado({ onClose, onSaved, toast }) {
 
         <div style={s.divider} />
 
-        <div style={{ ...s.fieldGroup, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <label style={{ ...s.fieldLabel, margin: 0 }}>Parcelado?</label>
-          <button onClick={() => set("parcelado", !form.parcelado)} style={{ background: form.parcelado ? C.gold : C.border, border: "none", borderRadius: 20, width: 44, height: 24, cursor: "pointer", transition: "background .2s", position: "relative" }}>
-            <div style={{ position: "absolute", top: 3, left: form.parcelado ? 22 : 3, width: 18, height: 18, borderRadius: 9, background: form.parcelado ? "#000" : C.muted, transition: "left .2s" }} />
-          </button>
-        </div>
+        {/* PARCERIA */}
+        <Toggle label="🤝 Parceria?" value={form.parceria} onChange={v => set("parceria", v)} />
+        {form.parceria && (
+          <div style={{ background: "#111", border: `1px solid ${C.purple}44`, borderRadius: 10, padding: 14, marginBottom: 16 }}>
+            <div style={{ fontSize: 11, color: C.purple, fontWeight: 700, marginBottom: 12, letterSpacing: 1 }}>TERMOS DA PARCERIA</div>
+            <div style={s.fieldGroup}>
+              <label style={s.fieldLabel}>Resumo / termos acordados *</label>
+              <textarea
+                style={s.textarea}
+                value={form.parceria_descricao}
+                onChange={e => set("parceria_descricao", e.target.value)}
+                placeholder="Ex: Mentorado oferece 10h de consultoria em marketing em troca de desconto de R$ 1.000 na mentoria..."
+              />
+            </div>
+            <div style={s.fieldGroup}>
+              <label style={s.fieldLabel}>Desconto da parceria (R$)</label>
+              <input style={s.input} type="number" value={form.parceria_desconto} onChange={e => set("parceria_desconto", e.target.value)} placeholder="0,00" />
+            </div>
+            {valorTotal > 0 && (
+              <div style={{ background: C.card, borderRadius: 8, padding: 10 }}>
+                <div style={s.row}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 11, color: C.muted }}>Valor cheio</div>
+                    <div style={{ fontWeight: 600, textDecoration: "line-through", color: C.muted }}>{fmt(valorTotal)}</div>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 11, color: C.muted }}>Desconto</div>
+                    <div style={{ fontWeight: 600, color: C.danger }}>- {fmt(desconto)}</div>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 11, color: C.muted }}>Valor efetivo</div>
+                    <div style={{ fontWeight: 700, color: C.purple }}>{fmt(valorEfetivo)}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
+        <div style={s.divider} />
+
+        {/* PARCELAMENTO */}
+        <Toggle label="Parcelado?" value={form.parcelado} onChange={v => set("parcelado", v)} />
         {form.parcelado && (
           <>
             <div style={s.row}>
@@ -299,13 +432,12 @@ function NovoMentorado({ onClose, onSaved, toast }) {
                 </select>
               </div>
             </div>
-
-            {form.valor_total && (
-              <div style={{ ...s.card, background: "#111", marginBottom: 16 }}>
+            {valorEfetivo > 0 && (
+              <div style={{ background: "#111", borderRadius: 8, padding: 10, marginBottom: 16 }}>
                 <div style={s.row}>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 11, color: C.muted }}>Entrada</div>
-                    <div style={{ fontWeight: 700, color: C.gold }}>{fmt(form.valor_entrada || 0)}</div>
+                    <div style={{ fontWeight: 700, color: C.gold }}>{fmt(entrada)}</div>
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 11, color: C.muted }}>Restante</div>
@@ -335,7 +467,7 @@ function NovoMentorado({ onClose, onSaved, toast }) {
           <>
             <div style={s.section}>Preview das parcelas</div>
             {preview.map((p, i) => (
-              <div key={i} style={{ ...s.row, marginBottom: 6, padding: "8px 10px", background: "#111", borderRadius: 6 }}>
+              <div key={i} style={{ ...s.row, marginBottom: 6, padding: "8px 10px", background: "#111", borderRadius: 6, alignItems: "center" }}>
                 <div style={{ flex: 1, fontSize: 12 }}>{p.tipo === "entrada" ? "🏁 Entrada" : `Parcela ${p.numero}`}</div>
                 <div style={{ fontSize: 12, color: C.muted }}>{fmtDate(p.vencimento)}</div>
                 <div style={{ fontSize: 12, fontWeight: 700, color: C.gold, minWidth: 80, textAlign: "right" }}>{fmt(p.valor)}</div>
@@ -346,52 +478,61 @@ function NovoMentorado({ onClose, onSaved, toast }) {
 
         <div style={{ ...s.row, marginTop: 20 }}>
           <button style={{ ...s.btnOutline, flex: 1 }} onClick={onClose}>Cancelar</button>
-          <button style={{ ...s.btn, flex: 2 }} onClick={salvar} disabled={loading}>{loading ? "Salvando..." : "Salvar Mentorado"}</button>
+          <button style={{ ...s.btn, flex: 2 }} onClick={salvar} disabled={loading}>{loading ? "Salvando..." : "Salvar"}</button>
         </div>
       </div>
     </div>
   );
 }
 
-// ── DETALHE DO MENTORADO ───────────────────────────────────────────────────────
+// ── DETALHE MENTORADO ──────────────────────────────────────────────────────────
 function DetalhesMentorado({ mentorado, onClose, onUpdate, toast }) {
   const [parcelas, setParcelas] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     const { data } = await supabase.from("parcelas").select("*").eq("mentorado_id", mentorado.id).order("numero");
-    setParcelas(data || []);
-    setLoading(false);
+    setParcelas(data || []); setLoading(false);
   }, [mentorado.id]);
 
   useEffect(() => { load(); }, [load]);
 
   const marcarPago = async (p) => {
-    const { error } = await supabase.from("parcelas").update({ pago: !p.pago, data_pagamento: !p.pago ? today() : null }).eq("id", p.id);
-    if (error) { toast("Erro ao atualizar", "error"); return; }
-    toast(!p.pago ? "Parcela marcada como paga!" : "Parcela desmarcada", "success");
-    load();
-    onUpdate();
+    await supabase.from("parcelas").update({ pago: !p.pago, data_pagamento: !p.pago ? today() : null }).eq("id", p.id);
+    toast(!p.pago ? "Pago!" : "Desmarcado", "success");
+    load(); onUpdate();
   };
 
   const pago = parcelas.filter(p => p.pago).reduce((a, p) => a + p.valor, 0);
   const aberto = parcelas.filter(p => !p.pago).reduce((a, p) => a + p.valor, 0);
-
   const statusColor = { ativo: C.gold, concluido: C.success, aguardando: C.warning, cancelado: C.danger };
 
   return (
     <div style={s.modal} onClick={e => e.target === e.currentTarget && onClose()}>
       <div style={s.modalContent}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 16 }}>{mentorado.nome}</div>
+            <div style={{ fontWeight: 700, fontSize: 16, display: "flex", alignItems: "center", gap: 8 }}>
+              {mentorado.nome}
+              {mentorado.parceria && <span style={s.tag(C.purple)}>parceria</span>}
+            </div>
             <div style={{ fontSize: 12, color: C.muted }}>{mentorado.tipos_mentoria?.nome}</div>
           </div>
           <span style={s.tag(statusColor[mentorado.status] || C.muted)}>{mentorado.status}</span>
         </div>
 
+        {mentorado.parceria && mentorado.parceria_descricao && (
+          <div style={{ background: C.purple + "11", border: `1px solid ${C.purple}33`, borderRadius: 8, padding: "10px 12px", marginBottom: 14 }}>
+            <div style={{ fontSize: 10, color: C.purple, fontWeight: 700, marginBottom: 4, letterSpacing: 1 }}>PARCERIA</div>
+            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.5 }}>{mentorado.parceria_descricao}</div>
+            {mentorado.parceria_desconto > 0 && (
+              <div style={{ fontSize: 11, color: C.purple, marginTop: 6 }}>Desconto aplicado: {fmt(mentorado.parceria_desconto)}</div>
+            )}
+          </div>
+        )}
+
         <div style={s.statGrid}>
-          <div style={s.statCard(C.gold + "33")}>
+          <div style={s.statCard(C.success + "33")}>
             <div style={s.label}>Recebido</div>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.success }}>{fmt(pago)}</div>
           </div>
@@ -403,7 +544,6 @@ function DetalhesMentorado({ mentorado, onClose, onUpdate, toast }) {
 
         <div style={s.divider} />
         <div style={s.section}>Parcelas</div>
-
         {loading ? <div style={{ color: C.muted, textAlign: "center" }}>Carregando...</div> : parcelas.map(p => (
           <div key={p.id} style={{ ...s.card, borderColor: p.pago ? C.success + "44" : (p.vencimento < today() ? C.danger + "44" : C.border), padding: "12px 14px", marginBottom: 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -427,7 +567,7 @@ function DetalhesMentorado({ mentorado, onClose, onUpdate, toast }) {
   );
 }
 
-// ── LISTA DE MENTORADOS ────────────────────────────────────────────────────────
+// ── MENTORADOS ─────────────────────────────────────────────────────────────────
 function Mentorados({ toast }) {
   const [lista, setLista] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -438,8 +578,7 @@ function Mentorados({ toast }) {
   const load = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase.from("mentorados").select("*, tipos_mentoria(nome)").order("created_at", { ascending: false });
-    setLista(data || []);
-    setLoading(false);
+    setLista(data || []); setLoading(false);
   }, []);
 
   useEffect(() => { load(); }, [load]);
@@ -462,13 +601,16 @@ function Mentorados({ toast }) {
           {filtrado.map(m => (
             <div key={m.id} style={{ ...s.card, cursor: "pointer" }} onClick={() => setDetalhe(m)}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-                <div style={{ fontWeight: 700, fontSize: 15 }}>{m.nome}</div>
+                <div style={{ fontWeight: 700, fontSize: 15, display: "flex", alignItems: "center", gap: 6 }}>
+                  {m.nome}
+                  {m.parceria && <span style={s.tag(C.purple)}>parceria</span>}
+                </div>
                 <span style={s.tag(statusColor[m.status] || C.muted)}>{m.status}</span>
               </div>
               <div style={{ fontSize: 12, color: C.muted, marginBottom: 8 }}>{m.tipos_mentoria?.nome}</div>
               <div style={s.row}>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 11, color: C.muted }}>Valor total</div>
+                  <div style={{ fontSize: 11, color: C.muted }}>Valor</div>
                   <div style={{ fontWeight: 700, color: C.gold }}>{fmt(m.valor_total)}</div>
                 </div>
                 {m.parcelado && (
@@ -495,7 +637,7 @@ function Mentorados({ toast }) {
   );
 }
 
-// ── PARCELAS (visão geral) ─────────────────────────────────────────────────────
+// ── PARCELAS ───────────────────────────────────────────────────────────────────
 function Parcelas({ toast }) {
   const [parcelas, setParcelas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -503,49 +645,49 @@ function Parcelas({ toast }) {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const query = supabase.from("parcelas").select("*, mentorados(nome, tipos_mentoria(nome))").order("vencimento");
-    if (filtro === "pendentes") query.eq("pago", false);
-    if (filtro === "pagas") query.eq("pago", true);
+    let q = supabase.from("parcelas").select("*, mentorados(nome, parceria, tipos_mentoria(nome))").order("vencimento");
+    if (filtro === "pendentes") q = q.eq("pago", false);
+    if (filtro === "pagas") q = q.eq("pago", true);
     if (filtro === "mes") {
       const now = new Date();
-      const ini = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
-      const fim = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-31`;
-      query.gte("vencimento", ini).lte("vencimento", fim);
+      const ini = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-01`;
+      const fim = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-31`;
+      q = q.gte("vencimento", ini).lte("vencimento", fim);
     }
-    const { data } = await query.limit(50);
-    setParcelas(data || []);
-    setLoading(false);
+    const { data } = await q.limit(50);
+    setParcelas(data || []); setLoading(false);
   }, [filtro]);
 
   useEffect(() => { load(); }, [load]);
 
   const marcarPago = async (p) => {
     await supabase.from("parcelas").update({ pago: !p.pago, data_pagamento: !p.pago ? today() : null }).eq("id", p.id);
-    toast(!p.pago ? "Pago!" : "Desmarcado", "success");
-    load();
+    toast(!p.pago ? "Pago!" : "Desmarcado", "success"); load();
   };
 
   return (
     <div style={s.page}>
       <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-        {["pendentes", "mes", "pagas"].map(f => (
+        {["pendentes","mes","pagas"].map(f => (
           <button key={f} onClick={() => setFiltro(f)} style={{ flex: 1, background: filtro === f ? C.gold : "transparent", color: filtro === f ? "#000" : C.muted, border: `1px solid ${filtro === f ? C.gold : C.border}`, borderRadius: 8, padding: "8px 4px", fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
             {f === "pendentes" ? "Pendentes" : f === "mes" ? "Este mês" : "Pagas"}
           </button>
         ))}
       </div>
-
       {loading ? <div style={{ textAlign: "center", color: C.muted, padding: 40 }}>Carregando...</div> : (
         <>
           {parcelas.length === 0 && <div style={{ textAlign: "center", color: C.muted, padding: 40 }}>Nenhuma parcela encontrada</div>}
           {parcelas.map(p => (
-            <div key={p.id} style={{ ...s.card, borderColor: p.pago ? C.success + "33" : (p.vencimento < today() ? C.danger + "44" : C.border) }}>
+            <div key={p.id} style={{ ...s.card, borderColor: p.pago ? C.success+"33" : (p.vencimento < today() ? C.danger+"44" : C.border) }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <button onClick={() => marcarPago(p)} style={{ width: 28, height: 28, borderRadius: 8, border: `2px solid ${p.pago ? C.success : C.border}`, background: p.pago ? C.success : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  {p.pago && <span style={{ color: "#fff", fontSize: 16, fontWeight: 900 }}>✓</span>}
+                  {p.pago && <span style={{ color:"#fff", fontSize:16, fontWeight:900 }}>✓</span>}
                 </button>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, fontSize: 13 }}>{p.mentorados?.nome}</div>
+                  <div style={{ fontWeight: 600, fontSize: 13, display:"flex", alignItems:"center", gap:6 }}>
+                    {p.mentorados?.nome}
+                    {p.mentorados?.parceria && <span style={s.tag(C.purple)}>parceria</span>}
+                  </div>
                   <div style={{ fontSize: 11, color: C.muted }}>{p.mentorados?.tipos_mentoria?.nome} • {p.tipo === "entrada" ? "Entrada" : `Parcela ${p.numero}`}</div>
                   <div style={{ fontSize: 11, color: p.pago ? C.success : (p.vencimento < today() ? C.danger : C.muted) }}>
                     {p.pago ? `Pago ${fmtDate(p.data_pagamento)}` : `Vence ${fmtDate(p.vencimento)}`}
@@ -570,23 +712,31 @@ const TABS = [
 
 export default function App() {
   const [tab, setTab] = useState("dashboard");
+  const [session, setSession] = useState(undefined);
   const [toastMsg, setToastMsg] = useState(null);
-
   const toast = (msg, type = "success") => setToastMsg({ msg, type });
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const sair = async () => { await supabase.auth.signOut(); };
+
+  if (session === undefined) return <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", color:C.muted }}>...</div>;
+  if (!session) return <Login onLogin={() => {}} />;
 
   return (
     <div style={s.app}>
       {toastMsg && <Toast msg={toastMsg.msg} type={toastMsg.type} onDone={() => setToastMsg(null)} />}
-
       <div style={s.header}>
         <div style={s.headerTitle}>⚔ HOMEM ESPIRITUAL</div>
-        <div style={{ fontSize: 11, color: C.muted }}>Financeiro</div>
+        <button onClick={sair} style={{ background:"none", border:`1px solid ${C.border}`, color:C.muted, borderRadius:6, padding:"4px 10px", fontSize:11, cursor:"pointer" }}>Sair</button>
       </div>
-
-      {tab === "dashboard" && <Dashboard onNav={setTab} />}
+      {tab === "dashboard" && <Dashboard />}
       {tab === "mentorados" && <Mentorados toast={toast} />}
       {tab === "parcelas" && <Parcelas toast={toast} />}
-
       <nav style={s.nav}>
         {TABS.map(t => (
           <button key={t.id} style={s.navBtn(tab === t.id)} onClick={() => setTab(t.id)}>
