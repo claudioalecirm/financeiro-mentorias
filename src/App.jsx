@@ -485,85 +485,284 @@ function NovoMentorado({ onClose, onSaved, toast }) {
   );
 }
 
-// ── DETALHE MENTORADO ──────────────────────────────────────────────────────────
-function DetalhesMentorado({ mentorado, onClose, onUpdate, toast }) {
+// ── EDITAR PARCELA (modal interno) ────────────────────────────────────────────
+function EditarParcela({ parcela, onClose, onSaved, toast }) {
+  const [form, setForm] = useState({
+    vencimento: parcela.vencimento || "",
+    valor: parcela.valor || "",
+    pago: parcela.pago || false,
+    data_pagamento: parcela.data_pagamento || "",
+  });
+  const [loading, setLoading] = useState(false);
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const salvar = async () => {
+    setLoading(true);
+    const { error } = await supabase.from("parcelas").update({
+      vencimento: form.vencimento,
+      valor: parseFloat(form.valor),
+      pago: form.pago,
+      data_pagamento: form.pago ? (form.data_pagamento || today()) : null,
+    }).eq("id", parcela.id);
+    if (error) { toast("Erro ao salvar", "error"); setLoading(false); return; }
+    toast("Parcela atualizada!", "success");
+    setLoading(false); onSaved();
+  };
+
+  return (
+    <div style={{ ...s.modal, zIndex: 200 }} onClick={e => e.target === e.currentTarget && onClose()}>
+      <div style={{ ...s.modalContent, maxHeight: "70vh" }}>
+        <div style={s.modalTitle}>
+          Editar — {parcela.tipo === "entrada" ? "Entrada" : `Parcela ${parcela.numero}`}
+        </div>
+
+        <div style={s.row}>
+          <div style={{ ...s.fieldGroup, flex: 1 }}>
+            <label style={s.fieldLabel}>Vencimento</label>
+            <input style={s.input} type="date" value={form.vencimento} onChange={e => set("vencimento", e.target.value)} />
+          </div>
+          <div style={{ ...s.fieldGroup, flex: 1 }}>
+            <label style={s.fieldLabel}>Valor (R$)</label>
+            <input style={s.input} type="number" value={form.valor} onChange={e => set("valor", e.target.value)} />
+          </div>
+        </div>
+
+        <Toggle label="Pago?" value={form.pago} onChange={v => set("pago", v)} />
+
+        {form.pago && (
+          <div style={s.fieldGroup}>
+            <label style={s.fieldLabel}>Data do pagamento</label>
+            <input style={s.input} type="date" value={form.data_pagamento} onChange={e => set("data_pagamento", e.target.value)} />
+          </div>
+        )}
+
+        <div style={{ ...s.row, marginTop: 8 }}>
+          <button style={{ ...s.btnOutline, flex: 1 }} onClick={onClose}>Cancelar</button>
+          <button style={{ ...s.btn, flex: 2 }} onClick={salvar} disabled={loading}>{loading ? "Salvando..." : "Salvar"}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── DETALHE / EDIÇÃO DO MENTORADO ─────────────────────────────────────────────
+function DetalhesMentorado({ mentorado: mentoradoInicial, onClose, onUpdate, toast }) {
+  const [aba, setAba] = useState("parcelas"); // "parcelas" | "dados"
   const [parcelas, setParcelas] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingP, setLoadingP] = useState(true);
+  const [editandoParcela, setEditandoParcela] = useState(null);
+  const [tipos, setTipos] = useState([]);
+  const [saving, setSaving] = useState(false);
 
-  const load = useCallback(async () => {
-    const { data } = await supabase.from("parcelas").select("*").eq("mentorado_id", mentorado.id).order("numero");
-    setParcelas(data || []); setLoading(false);
-  }, [mentorado.id]);
+  // form de edição dos dados do mentorado
+  const [form, setForm] = useState({
+    nome: mentoradoInicial.nome || "",
+    telefone: mentoradoInicial.telefone || "",
+    email: mentoradoInicial.email || "",
+    tipo_mentoria_id: mentoradoInicial.tipo_mentoria_id || "",
+    valor_total: mentoradoInicial.valor_total || "",
+    data_inicio: mentoradoInicial.data_inicio || "",
+    dia_cobranca: mentoradoInicial.dia_cobranca || "",
+    status: mentoradoInicial.status || "ativo",
+    observacoes: mentoradoInicial.observacoes || "",
+    parceria: mentoradoInicial.parceria || false,
+    parceria_descricao: mentoradoInicial.parceria_descricao || "",
+    parceria_desconto: mentoradoInicial.parceria_desconto || "",
+  });
+  const setF = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-  useEffect(() => { load(); }, [load]);
+  const loadParcelas = useCallback(async () => {
+    setLoadingP(true);
+    const { data } = await supabase.from("parcelas").select("*").eq("mentorado_id", mentoradoInicial.id).order("numero");
+    setParcelas(data || []); setLoadingP(false);
+  }, [mentoradoInicial.id]);
+
+  useEffect(() => { loadParcelas(); }, [loadParcelas]);
+  useEffect(() => {
+    supabase.from("tipos_mentoria").select("*").eq("ativo", true).then(({ data }) => setTipos(data || []));
+  }, []);
 
   const marcarPago = async (p) => {
     await supabase.from("parcelas").update({ pago: !p.pago, data_pagamento: !p.pago ? today() : null }).eq("id", p.id);
     toast(!p.pago ? "Pago!" : "Desmarcado", "success");
-    load(); onUpdate();
+    loadParcelas(); onUpdate();
+  };
+
+  const salvarDados = async () => {
+    setSaving(true);
+    const { error } = await supabase.from("mentorados").update({
+      nome: form.nome,
+      telefone: form.telefone,
+      email: form.email,
+      tipo_mentoria_id: form.tipo_mentoria_id,
+      valor_total: parseFloat(form.valor_total),
+      data_inicio: form.data_inicio,
+      dia_cobranca: parseInt(form.dia_cobranca) || null,
+      status: form.status,
+      observacoes: form.observacoes,
+      parceria: form.parceria,
+      parceria_descricao: form.parceria ? form.parceria_descricao : null,
+      parceria_desconto: form.parceria ? parseFloat(form.parceria_desconto) || 0 : 0,
+    }).eq("id", mentoradoInicial.id);
+    if (error) { toast("Erro ao salvar", "error"); setSaving(false); return; }
+    toast("Dados atualizados!", "success");
+    setSaving(false); onUpdate();
   };
 
   const pago = parcelas.filter(p => p.pago).reduce((a, p) => a + p.valor, 0);
   const aberto = parcelas.filter(p => !p.pago).reduce((a, p) => a + p.valor, 0);
   const statusColor = { ativo: C.gold, concluido: C.success, aguardando: C.warning, cancelado: C.danger };
 
+  const tabStyle = (ativa) => ({
+    flex: 1, padding: "8px 0", background: "none", border: "none",
+    borderBottom: `2px solid ${ativa ? C.gold : "transparent"}`,
+    color: ativa ? C.gold : C.muted, fontWeight: ativa ? 700 : 400,
+    fontSize: 13, cursor: "pointer",
+  });
+
   return (
-    <div style={s.modal} onClick={e => e.target === e.currentTarget && onClose()}>
-      <div style={s.modalContent}>
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: 16, display: "flex", alignItems: "center", gap: 8 }}>
-              {mentorado.nome}
-              {mentorado.parceria && <span style={s.tag(C.purple)}>parceria</span>}
+    <>
+      <div style={s.modal} onClick={e => e.target === e.currentTarget && onClose()}>
+        <div style={s.modalContent}>
+          {/* Cabeçalho */}
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 12 }}>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 16, display: "flex", alignItems: "center", gap: 8 }}>
+                {form.nome}
+                {form.parceria && <span style={s.tag(C.purple)}>parceria</span>}
+              </div>
+              <div style={{ fontSize: 12, color: C.muted }}>{tipos.find(t => t.id === form.tipo_mentoria_id)?.nome || mentoradoInicial.tipos_mentoria?.nome}</div>
             </div>
-            <div style={{ fontSize: 12, color: C.muted }}>{mentorado.tipos_mentoria?.nome}</div>
+            <span style={s.tag(statusColor[form.status] || C.muted)}>{form.status}</span>
           </div>
-          <span style={s.tag(statusColor[mentorado.status] || C.muted)}>{mentorado.status}</span>
-        </div>
 
-        {mentorado.parceria && mentorado.parceria_descricao && (
-          <div style={{ background: C.purple + "11", border: `1px solid ${C.purple}33`, borderRadius: 8, padding: "10px 12px", marginBottom: 14 }}>
-            <div style={{ fontSize: 10, color: C.purple, fontWeight: 700, marginBottom: 4, letterSpacing: 1 }}>PARCERIA</div>
-            <div style={{ fontSize: 12, color: C.text, lineHeight: 1.5 }}>{mentorado.parceria_descricao}</div>
-            {mentorado.parceria_desconto > 0 && (
-              <div style={{ fontSize: 11, color: C.purple, marginTop: 6 }}>Desconto aplicado: {fmt(mentorado.parceria_desconto)}</div>
-            )}
+          {/* Totais rápidos */}
+          <div style={s.statGrid}>
+            <div style={s.statCard(C.success + "33")}>
+              <div style={s.label}>Recebido</div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: C.success }}>{fmt(pago)}</div>
+            </div>
+            <div style={s.statCard()}>
+              <div style={s.label}>A receber</div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: C.warning }}>{fmt(aberto)}</div>
+            </div>
           </div>
-        )}
 
-        <div style={s.statGrid}>
-          <div style={s.statCard(C.success + "33")}>
-            <div style={s.label}>Recebido</div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: C.success }}>{fmt(pago)}</div>
+          {/* Abas */}
+          <div style={{ display: "flex", borderBottom: `1px solid ${C.border}`, marginBottom: 16 }}>
+            <button style={tabStyle(aba === "parcelas")} onClick={() => setAba("parcelas")}>Parcelas</button>
+            <button style={tabStyle(aba === "dados")} onClick={() => setAba("dados")}>Editar dados</button>
           </div>
-          <div style={s.statCard()}>
-            <div style={s.label}>A receber</div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: C.warning }}>{fmt(aberto)}</div>
-          </div>
-        </div>
 
-        <div style={s.divider} />
-        <div style={s.section}>Parcelas</div>
-        {loading ? <div style={{ color: C.muted, textAlign: "center" }}>Carregando...</div> : parcelas.map(p => (
-          <div key={p.id} style={{ ...s.card, borderColor: p.pago ? C.success + "44" : (p.vencimento < today() ? C.danger + "44" : C.border), padding: "12px 14px", marginBottom: 8 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <button onClick={() => marcarPago(p)} style={{ width: 24, height: 24, borderRadius: 6, border: `2px solid ${p.pago ? C.success : C.border}`, background: p.pago ? C.success : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                {p.pago && <span style={{ color: "#fff", fontSize: 14, fontWeight: 900 }}>✓</span>}
-              </button>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 13, fontWeight: 600 }}>{p.tipo === "entrada" ? "Entrada" : `Parcela ${p.numero}`}</div>
-                <div style={{ fontSize: 11, color: p.pago ? C.success : (p.vencimento < today() ? C.danger : C.muted) }}>
-                  {p.pago ? `Pago em ${fmtDate(p.data_pagamento)}` : `Vence ${fmtDate(p.vencimento)}`}
+          {/* ABA PARCELAS */}
+          {aba === "parcelas" && (
+            <>
+              {loadingP
+                ? <div style={{ color: C.muted, textAlign: "center", padding: 20 }}>Carregando...</div>
+                : parcelas.map(p => (
+                  <div key={p.id} style={{ ...s.card, borderColor: p.pago ? C.success+"44" : (p.vencimento < today() ? C.danger+"44" : C.border), padding: "12px 14px", marginBottom: 8 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      {/* Checkbox pago */}
+                      <button onClick={() => marcarPago(p)} style={{ width: 24, height: 24, borderRadius: 6, border: `2px solid ${p.pago ? C.success : C.border}`, background: p.pago ? C.success : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        {p.pago && <span style={{ color: "#fff", fontSize: 14, fontWeight: 900 }}>✓</span>}
+                      </button>
+                      {/* Info */}
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 13, fontWeight: 600 }}>{p.tipo === "entrada" ? "Entrada" : `Parcela ${p.numero}`}</div>
+                        <div style={{ fontSize: 11, color: p.pago ? C.success : (p.vencimento < today() ? C.danger : C.muted) }}>
+                          {p.pago ? `Pago em ${fmtDate(p.data_pagamento)}` : `Vence ${fmtDate(p.vencimento)}`}
+                        </div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ fontWeight: 700, color: p.pago ? C.success : C.gold }}>{fmt(p.valor)}</div>
+                        {/* Botão editar parcela */}
+                        <button onClick={() => setEditandoParcela(p)} style={{ background: "none", border: "none", color: C.muted, fontSize: 11, cursor: "pointer", marginTop: 2 }}>✏️ editar</button>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              }
+            </>
+          )}
+
+          {/* ABA DADOS */}
+          {aba === "dados" && (
+            <>
+              <div style={s.fieldGroup}>
+                <label style={s.fieldLabel}>Nome completo</label>
+                <input style={s.input} value={form.nome} onChange={e => setF("nome", e.target.value)} />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.fieldLabel}>Telefone / WhatsApp</label>
+                <input style={s.input} value={form.telefone} onChange={e => setF("telefone", e.target.value)} />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.fieldLabel}>E-mail</label>
+                <input style={s.input} type="email" value={form.email} onChange={e => setF("email", e.target.value)} />
+              </div>
+              <div style={s.fieldGroup}>
+                <label style={s.fieldLabel}>Tipo de mentoria</label>
+                <select style={s.select} value={form.tipo_mentoria_id} onChange={e => setF("tipo_mentoria_id", e.target.value)}>
+                  {tipos.map(t => <option key={t.id} value={t.id}>{t.nome}</option>)}
+                </select>
+              </div>
+              <div style={s.row}>
+                <div style={{ ...s.fieldGroup, flex: 1 }}>
+                  <label style={s.fieldLabel}>Valor total (R$)</label>
+                  <input style={s.input} type="number" value={form.valor_total} onChange={e => setF("valor_total", e.target.value)} />
+                </div>
+                <div style={{ ...s.fieldGroup, flex: 1 }}>
+                  <label style={s.fieldLabel}>Data de início</label>
+                  <input style={s.input} type="date" value={form.data_inicio} onChange={e => setF("data_inicio", e.target.value)} />
                 </div>
               </div>
-              <div style={{ fontWeight: 700, color: p.pago ? C.success : C.gold }}>{fmt(p.valor)}</div>
-            </div>
-          </div>
-        ))}
+              <div style={s.fieldGroup}>
+                <label style={s.fieldLabel}>Status</label>
+                <select style={s.select} value={form.status} onChange={e => setF("status", e.target.value)}>
+                  <option value="ativo">Ativo</option>
+                  <option value="aguardando">Aguardando</option>
+                  <option value="concluido">Concluído</option>
+                  <option value="cancelado">Cancelado</option>
+                </select>
+              </div>
 
-        <button style={{ ...s.btnOutline, width: "100%", marginTop: 12 }} onClick={onClose}>Fechar</button>
+              <Toggle label="🤝 Parceria?" value={form.parceria} onChange={v => setF("parceria", v)} />
+              {form.parceria && (
+                <div style={{ background: "#111", border: `1px solid ${C.purple}44`, borderRadius: 10, padding: 14, marginBottom: 16 }}>
+                  <div style={s.fieldGroup}>
+                    <label style={s.fieldLabel}>Termos da parceria</label>
+                    <textarea style={s.textarea} value={form.parceria_descricao} onChange={e => setF("parceria_descricao", e.target.value)} />
+                  </div>
+                  <div style={s.fieldGroup}>
+                    <label style={s.fieldLabel}>Desconto aplicado (R$)</label>
+                    <input style={s.input} type="number" value={form.parceria_desconto} onChange={e => setF("parceria_desconto", e.target.value)} />
+                  </div>
+                </div>
+              )}
+
+              <div style={s.fieldGroup}>
+                <label style={s.fieldLabel}>Observações</label>
+                <textarea style={s.textarea} value={form.observacoes} onChange={e => setF("observacoes", e.target.value)} placeholder="Notas gerais sobre o mentorado..." />
+              </div>
+
+              <button style={s.btn} onClick={salvarDados} disabled={saving}>{saving ? "Salvando..." : "Salvar alterações"}</button>
+            </>
+          )}
+
+          <button style={{ ...s.btnOutline, width: "100%", marginTop: 12 }} onClick={onClose}>Fechar</button>
+        </div>
       </div>
-    </div>
+
+      {/* Modal de edição de parcela */}
+      {editandoParcela && (
+        <EditarParcela
+          parcela={editandoParcela}
+          onClose={() => setEditandoParcela(null)}
+          onSaved={() => { setEditandoParcela(null); loadParcelas(); onUpdate(); }}
+          toast={toast}
+        />
+      )}
+    </>
   );
 }
 
