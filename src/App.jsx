@@ -95,7 +95,7 @@ function Dashboard({ onNav }) {
   return (
     <div style={s.page}>
       <div style={{ ...s.goldCard, marginBottom: 16 }}>
-        <div style={{ fontSize: 11, color: C.gold, letterSpacing: 1, marginBottom: 4 }}>⚔ GOVERNO PESSOAL — FINANCEIRO</div>
+        <div style={{ fontSize: 11, color: C.gold, letterSpacing: 1, marginBottom: 4 }}>⚔ HOMEM ESPIRITUAL — FINANCEIRO</div>
         <div style={{ fontSize: 13, color: C.muted }}>Visão geral das mentorias</div>
       </div>
 
@@ -579,7 +579,7 @@ export default function App() {
       {toastMsg && <Toast msg={toastMsg.msg} type={toastMsg.type} onDone={() => setToastMsg(null)} />}
 
       <div style={s.header}>
-        <div style={s.headerTitle}>⚔ GOVERNO PESSOAL</div>
+        <div style={s.headerTitle}>⚔ HOMEM ESPIRITUAL</div>
         <div style={{ fontSize: 11, color: C.muted }}>Financeiro</div>
       </div>
 
